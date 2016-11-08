@@ -1,0 +1,52 @@
+- hosts: all
+  vars:
+    setup_root: /home/{username}/Workspace/IndividualProject/set-up/
+    programs_dir: /home/{username}/Workspace/IndividualProject/set-upset-up/programs
+  
+  tasks: 
+          
+        - shell: echo "Set-up initiated, missing directories will be created...!"
+        
+        - shell: echo "Base directory {{ setup_root }}"
+
+        - name: Create programs directory 
+          file: path="{{ programs_dir  }}" state=directory mode=0755
+          
+        - shell: echo "Now installing Apache Spark"  
+       
+        - name: Create spark directory          
+          file: path="{{ programs_dir }}/spark" state=directory mode=0755
+          
+        - stat: path="{{ programs_dir }}/spark/spark-1.6.2-bin-hadoop2.6.tgz"
+          register: spark
+                  
+        - name: Download Apache Spark
+          get_url: url=http://www-us.apache.org/dist/spark/spark-1.6.2/spark-1.6.2-bin-hadoop2.6.tgz dest="{{ programs_dir }}/spark" 
+          when: spark.stat.exists == False
+
+        - name: Extract Apache Spark
+          unarchive: src="{{ programs_dir }}/spark/spark-1.6.2-bin-hadoop2.6.tgz" dest="{{ programs_dir }}/spark" creates="{{ programs_dir }}/spark/spark_info.txt"
+          
+        - shell: echo "Apache Spark base install is ready!"
+        
+        - shell: echo "Now installing Apache Kafka"  
+       
+        - name: Create kafka directory          
+          file: path="{{ programs_dir }}/kafka" state=directory mode=0755
+          
+        - stat: path="{{ programs_dir }}/kafka/kafka_2.11-0.10.0.0.tgz"
+          register: kafka
+                  
+        - name: Download Apache Kafka
+          get_url: url=http://www-eu.apache.org/dist/kafka/0.10.0.0/kafka_2.11-0.10.0.0.tgz dest="{{ programs_dir }}/kafka"
+          when: kafka.stat.exists == False
+
+        - name: Extract Apache Kafka
+          unarchive: src="{{ programs_dir }}/kafka/kafka_2.11-0.10.0.0.tgz" dest="{{ programs_dir }}/kafka" creates="{{ programs_dir }}/kafka/kafka_info.txt"
+          
+        - shell: echo "Apache Kafka base install is ready!"
+        
+          
+
+          
+
