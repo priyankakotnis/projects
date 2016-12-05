@@ -2,7 +2,7 @@ package com.example.project;
 
 /**
  *
- * @author seahawk
+ * @author Priyanka Kotnis
  */
 @FunctionalInterface
 public interface TestInterface {
